@@ -1,0 +1,25 @@
+{% extends "userbase.html" %}
+{% block title %}人员登记{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         <nav class="navbar navbar-light bg-light">
+            {% if form.errors %}
+            <p style="color: red;">Please correct the error{{ form.errors|pluralize }} below.</p>
+            {% endif %}
+         </nav>
+         <span>
+            <form action="" method="post">
+               <label for="id_name">Name:</label>
+               <input name="name" maxlength="16" required="" id="id_name" type="text">
+               <label for="id_id_number">Id number:</label>
+               <input name="id_number" maxlength="18" minlength="18" required="" id="id_id_number" type="text">
+               <input type="submit" value="Submit">
+            </form>
+         </span>
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

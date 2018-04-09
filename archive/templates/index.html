@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}主页{% endblock %}
+{% block content %}
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block; ">
+   <form>
+      <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLongTitle">功能</h5>
+            </div>
+            <div class="modal-body">
+               <div class="btn-group-vertical" role="group" style="width: 100%;">
+                  <a class="btn btn-primary" href="/person/search/">人员查找</a>
+                  <a class="btn btn-primary" href="/person/new/">人员登记</a>
+                  {% if user.is_staff %}
+                  <a class="btn btn-primary" href="/log/">历史记录</a>
+                  {% endif %}
+                  <a class="btn btn-primary" href="/password/">修改密码</a>
+                  <a class="btn btn-primary" href="/logout/">退出登录</a>
+               </div>
+            </div>
+            <div class="modal-footer">
+               操作员: {{user.last_name}}{{user.first_name}}
+            </div>
+         </div>
+      </div>
+   </form>
+</div>
+{% endblock %}

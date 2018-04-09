@@ -1,0 +1,96 @@
+{% extends "userbase.html" %}
+{% block title %}人员信息查找{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">
+               {% for message in messages %}
+               <p>{{ message }}</p>
+               {% endfor %}
+            </span>
+         </nav>
+         
+         <span>
+            <form action="" method="get">
+               <ul class="list-group col-md-6">
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">姓名</span>
+                        </div>
+                        <input type="text" name="name" id="name" value="{{name}}">
+                     </div>
+                  </li>
+
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">编号</span>
+                        </div>
+                        <input type="text" name="code" id="code" value="{{code}}">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">工作单位</span>
+                        </div>
+                        <input type="text" name="unit" id="unit" value="{{unit}}">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">身份证号</span>
+                        </div>
+                        <input type="text" name="id_number" id="id_number" value="{{id_number}}">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <button type="submit" class="btn btn-primary col-sm-12" name="search">查找</button>
+                  </li>
+                  <li class="list-group-item">
+                     <button type="submit" class="btn btn-primary col-sm-12" name="create">新增</button>
+                  </li>
+
+               </ul>
+               
+            </form>
+         </span>
+
+         {% if person_list %}
+         <span>
+            <table class="table table-sm">
+               <thead>
+                  <tr>
+                     <th scope="col">姓名</th>
+                     <th scope="col">编号</th>
+                     <th scope="col">单位</th>
+                     <th scope="col">身份证</th>
+                     <th scope="col">登记</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for person in person_list %}
+                  <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
+                     <td scope="row">{{ person.name}}</td>
+                     <td scope="row">{{ person.code}}</td>
+                     <td scope="row">{{ person.unit}}</td>
+                     <td scope="row">{{ person.id_number}}</td>
+                     <td>
+                        <a class="btn btn-primary" href="/person/detail/{{person.id}}" role="button">详细信息</a>
+                     </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+            {% endif %}
+         </span>
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "userbase.html" %}
+{% block title %}材料登记{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">
+               {% for message in messages %}
+               <p>{{ message }}</p>
+               {% endfor %}
+            </span>
+         </nav>
+         
+         <span>
+            <nav class="nav">
+               <a class="nav-link disabled" href="#">姓名: {{person.name}}</a>
+               <a class="nav-link disabled" href="#">编号: {{person.code}}</a>
+               <a class="nav-link disabled" href="#">工作单位: {{person.unit}}</a>
+               <a class="nav-link disabled" href="#">身份证号: {{person.id_number}}</a>
+            </nav>
+         </span>
+         
+         <span>
+            <form action="" method="get">
+               <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="材料名称关键字" name="key_word" value="{{key_word}}">
+                  <div class="input-group-append">
+                     <input class="btn btn-primary" type="submit"></button>
+                  </div>
+               </div>
+            </form>
+         </span>
+         <span>
+            <form action="" method="post">
+               <input type="hidden" class="form-control" placeholder="材料名称关键字" name="key_word" value="{{key_word}}" >
+               <ul class="list-group">
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">材料名称</span>
+                        </div>
+                        {{ form.category }}
+                     </div>
+                     {% for error in form.category.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">页数</span>
+                        </div>
+                        {{ form.quantity }}
+                     </div>
+                     {% for error in form.quantity.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">材料形成日期</span>
+                        </div>
+                        {{ form.document_date }}
+                     </div>
+                     {% for error in form.document_date.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">备注</span>
+                        </div>
+                        {{ form.comment }}
+                     </div>
+                     {% for error in form.document_date.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <button type="submit" class="btn btn-primary">提交</button>
+                     <a class="btn btn-primary" href="/person/detail/{{person.id}}">返回人员信息</a>
+                  </li>
+               </ul>
+               
+            </form>
+         </span>
+         
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

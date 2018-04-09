@@ -1,0 +1,67 @@
+{% extends "userbase.html" %}
+{% block title %}人员详细信息{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">
+               {% for message in messages %}
+               <p>{{ message }}</p>
+               {% endfor %}
+            </span>
+         </nav>
+
+         <span>
+            <ul class="list-group">
+               <li class="list-group-item">姓名: {{person.name}}</li>
+               <li class="list-group-item">编号: {{person.code}}</li>
+               <li class="list-group-item">工作单位: {{person.unit}}</li>
+               <li class="list-group-item">身份证号: {{person.id_number}}</li>
+               <li class="list-group-item">
+                  <a class="btn btn-primary" href="/register/{{person.id}}" role="button">录入材料</a>
+                  <a class="btn btn-primary" href="/person/excel/{{person.id}}" role="button">导出Excel</a>
+                  {% if user.is_staff%}
+                  <a class="btn btn-primary" href="/person/log/{{person.id}}" role="button">查看修改历史</a>
+                  {% endif %}
+               </li>
+            </ul>
+         </span>
+
+         <span>
+            <table class="table table-sm">
+               <thead>
+                  <tr>
+                     <th scope="col">材料名称</th>
+                     <th scope="col">页数</th>
+                     <th scope="col">材料形成日期</th>
+                     <th scope="col">备注</th>
+                     <th scope="col">操作</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for register in registers %}
+                  <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
+                     <td scope="row">{{ register.category.name}}</td>
+                     <td scope="row">{{ register.quantity}}</td>
+                     <td scope="row">{{ register.document_date}}</td>
+                     <td scope="row">{{ register.comment}}</td>
+                     <td>
+                        <form action="" method="post">
+                           <input type="hidden" id="register_id" name="register_id" value="{{register.id}}">
+                           <input type="hidden" id="action" name="action" value="delete">
+                           <input type="submit" class="btn btn-primary" value="删除">
+                        </form>
+                     </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </span>
+         
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

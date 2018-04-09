@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}登记{% endblock %}
+{% block header %}
+<header style="float: right; margin-right: 1em;">   
+   <section>
+      操作员: {{user.last_name}}{{user.first_name}}
+      <div class="btn-group" role="group">
+         <a class="btn btn-primary" href="/register/">材料登记</a>
+         <a class="btn btn-primary" href="/category/">材料查询</a>
+         {% if user.is_staff %}
+            <a class="btn btn-primary" href="/log/">历史记录</a>
+         {% endif %}
+         <a class="btn btn-primary" href="/password/">修改密码</a>
+         <a class="btn btn-primary" href="/logout/">退出登录</a>
+      </div>
+   </section>
+</header>
+{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">{{message}}</span>
+         </nav>
+         <span>
+            <form action="" method="post">
+               <ul class="list-group col-md-6">
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">姓名</span>
+                        </div>
+                        <input type="text" name="quantity" value="" id="quantity">
+                     </div>
+                     <p>多余</p>
+                     <p>少于</p>
+                  </li>
+
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">编号</span>
+                        </div>
+                        <input type="text" name="quantity" value="" id="quantity">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">工作单位</span>
+                        </div>
+                        <input type="text" name="quantity" value="" id="quantity">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <button type="submit" class="btn btn-primary col-sm-12">提交</button>
+                  </li>
+               </ul>
+               
+            </form>
+         </span>
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

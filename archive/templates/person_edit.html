@@ -1,0 +1,92 @@
+{% extends "userbase.html" %}
+{% block title %}人员信息管理{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">
+               {% for message in messages %}
+               <p>{{ message }}</p>
+               {% endfor %}
+            </span>
+         </nav>
+
+         {% if person %}
+         <span>
+            <ul class="list-group">
+               <li class="list-group-item">姓名: {{person.name}}</li>
+               <li class="list-group-item">编号: {{person.code}}</li>
+               <li class="list-group-item">工作单位: {{person.unit}}</li>
+               <li class="list-group-item">身份证号: {{person.id_number}}</li>
+               <li class="list-group-item">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                     <a class="btn btn-primary" href="/register/{{person.id}}" role="button">录入材料</a>
+                     <a class="btn btn-primary" href="/person/detail/{{person.id}}" role="button">查看用户</a>
+                  </div>
+               </li>
+            </ul>
+         </span>
+         {% else %}
+         <span>
+            <form action="" method="post">
+               <ul class="list-group col-md-6">
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">姓名</span>
+                        </div>
+                        {{ form.name }}
+                     </div>
+                     {% for error in form.name.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">编号</span>
+                        </div>
+                        {{ form.code }}
+                     </div>
+                     {% for error in form.code.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">工作单位</span>
+                        </div>
+                        {{ form.unit }}
+                     </div>
+                     {% for error in form.unit.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">身份证号</span>
+                        </div>
+                        {{ form.id_number }}
+                     </div>
+                     {% for error in form.id_number.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <button type="submit" class="btn btn-primary col-sm-12">提交</button>
+                  </li>
+               </ul>
+               
+            </form>
+         </span>
+         {% endif %}
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

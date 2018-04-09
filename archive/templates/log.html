@@ -1,0 +1,67 @@
+{% extends "userbase.html" %}
+{% block title %}历史{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">
+               {% for message in messages %}
+               <p>{{ message }}</p>
+               {% endfor %}
+            </span>
+         </nav>
+         {% if person %}
+         <span>
+            <ul class="list-group">
+               <li class="list-group-item">姓名: {{person.name}}</li>
+               <li class="list-group-item">档案编号: {{person.code}}</li>
+               <li class="list-group-item">工作单位: {{person.unit}}</li>
+               <li class="list-group-item">身份证号: {{person.id_number}}</li>
+               <li class="list-group-item">
+                  <a class="btn btn-primary" href="/person/detail/{{person.id}}" role="button">返回</a>
+               </li>
+            </ul>
+         </span>
+
+         <span>
+            <table class="table table-condensed table-bordered">
+               <tbody>
+                  <thead>
+                     <tr>
+                        <td>材料</td>
+                        <td>材料类别</td>
+                        <td>日期</td>
+                        <td>页数</td>
+                        <td>操作员</td>
+                        <td>操作</td>
+                        <td>操作日期</td>
+                        <td>操作时间</td>
+                     </tr>
+                  </thead>
+                  {% for log in log_list %}
+                  <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
+                     <td>{{ log.category.name }}</td>
+                     <td>{{ log.category.code }}</td>
+                     <td>{{ log.document_date }}</td>
+                     <td>{{ log.quantity }}</td>
+                     <td>{{ log.user.username }}</td>
+                     <td>{% if log.operation == 'delete' %}删除{% endif %}{%if log.operation == 'create' %}建立{% endif %}</td>
+                     <td>{{ log.operation_date }}</td>
+                     <td>{{ log.operation_time }}</td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </span>
+         {% else %}
+         <span>
+            <ul class="list-group">
+               <li class="list-group-item"><a class="btn btn-primary" href="/person/new/" role="button">新增人员</a></li>
+            </ul>
+         </span>
+         {% endif %}
+      </section>
+   </div>
+</div>
+{% endblock %}

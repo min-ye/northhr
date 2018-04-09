@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}登记{% endblock %}
+{% block header %}
+<header style="float: right; margin-right: 1em;">   
+   <section>
+      操作员: {{user.last_name}}{{user.first_name}}
+      <div class="btn-group" role="group">
+         <a class="btn btn-primary" href="/register/">材料登记</a>
+         <a class="btn btn-primary" href="/category/">材料查询</a>
+         {% if user.is_staff %}
+            <a class="btn btn-primary" href="/log/">历史记录</a>
+         {% endif %}
+         <a class="btn btn-primary" href="/password/">修改密码</a>
+         <a class="btn btn-primary" href="/logout/">退出登录</a>
+      </div>
+   </section>
+</header>
+{% endblock %}
+{% block content %}
+<div id="wrapper">
+   <div class="col-xs-12">
+      <section class="col-md-12">
+         <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text mb-0">{{message}}</span>
+         </nav>
+         <span>
+            <form action="" method="post">
+               <div class="form-row col-md-10">
+                  <div class="form-group col-md-6 input-group">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text">姓名</span>
+                     </div>
+                     {{ form.name }}
+                  </div>
+                  <div class="form-group col-md-6 input-group">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text">编号</span>
+                     </div>
+                     {{ form.id_number}}
+                  </div>
+               </div>
+               {% if form.name.errors %}
+               <div class="form-row col-md-10">
+                  <div class="form-group col-md-6 input-group">
+                     {% if form.name.errors %}
+                     {{ form.name.errors }}
+                     {% endif %}
+                  </div>
+                  <div class="form-group col-md-6 input-group">
+                     {% if form.id_number.errors %}
+                     {{ form.id_number.errors }}
+                     {% endif %}
+                  </div>
+               </div>
+               {% endif %}
+               <div class="form-row col-md-10">
+                  <div class="form-group col-md-6 input-group">
+                  </div>
+                  <div class="form-group col-md-6 input-group">
+                  </div>
+               </div>
+               <div class="form-row col-md-10">
+                  <div class="form-group input-group col-md-12">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text">单位</span>
+                     </div>
+                     {{ form.department }}
+                  </div>
+               </div>
+               
+               <button type="submit" class="btn btn-primary">Sign in</button>
+            </form>
+         </span>
+      </section>
+   </div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

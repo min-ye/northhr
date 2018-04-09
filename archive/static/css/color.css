@@ -1,0 +1,77 @@
+html, body {
+   background: #fff;
+   color: #333333;
+}
+
+p.ever {
+   color: #999;
+}
+
+a.disabled {
+   color: #333333;
+}
+
+div.login {
+}
+
+section.logo {
+   background-image: url("../image/home-background.jpg");
+   background-repeat: no-repeat;
+   background-size:100% 100%;
+   -moz-background-size:100% 100%;
+   color: #FFFFFF
+}
+
+section.video, section.product {
+   background-color: #0588D8;
+   color:#F7F7F7;
+}
+
+section.intro, section.information {
+   background-color: #F7F7F7 ;
+}
+
+section.export-product, section.import-tax, section.import-product, section.export-tax {
+   background-color: #555555;
+   color: #cccccc;
+}
+
+div.modal {
+   color: #333333;
+}
+
+section.company td.title {
+   background-color: #0588D8;
+   color: #F7F7F7;
+}
+
+section.company {
+   background-color: #F7F7F7;
+   color: #333333
+}
+
+table thead {
+   background-color: aquamarine;
+}
+
+/*#wrapper section.col-md-12:nth-child(even) { background-color: #0588D8 ; }*/
+
+/*#wrapper section.col-md-12:nth-child(odd) { background-color: #F7F7F7; }*/
+
+#wrapper > div.tab-content > section {
+   background-color: transparent;
+}
+
+footer {
+   background-color: black;
+}
+
+@media (max-width: 970px){
+   section.video, section.information, section.export-product, section.export-tax {
+      background-color: #0588D8;
+   }
+
+   section.intro, section.product, section.import-product, section.import-tax {
+      background-color: #F7F7F7 ;
+   }
+}

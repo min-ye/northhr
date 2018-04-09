@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block header %}
+<header style="float: right; margin-right: 1em;">   
+   <section>
+      操作员: {{user.last_name}}{{user.first_name}}
+      <div class="btn-group" role="group">
+         <a class="btn btn-primary" href="/person/search/">查找人员</a>
+         <a class="btn btn-primary" href="/password/">修改密码</a>
+         <a class="btn btn-primary" href="/logout/">退出登录</a>
+      </div>
+   </section>
+</header>
+{% endblock %}

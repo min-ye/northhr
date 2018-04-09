@@ -1,0 +1,47 @@
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    font-family: "Lantinghei SC", "PingFang SC","HanHei SC","Helvetica Neue","Microsoft Yahei","Helvetica","STHeitiSC-Light","Arial",sans-serif;
+    font-size: 1em;
+}
+
+section.logo span.company {
+   font-size: 3em;
+}
+
+section.logo span.level {
+   font-size: 1.5em;
+}
+
+h2 {
+   font-size: 2em;
+}
+
+section h3 {
+   font-family: "Lantinghei SC","Microsoft Yahei","Arial";
+   font-size: 1.5em;
+   font-weight: normal;
+}
+
+section 25 {
+   font-family: "Lantinghei SC","Microsoft Yahei","Arial";
+   font-size: 1.2em;
+   font-weight: normal;
+}
+
+.copyright {
+   font-family: "Lantinghei SC","Microsoft Yahei","Arial";
+   font-weight: normal;
+   color: #d6d6d6;
+}
+
+.copyright a, .about a {
+   color: #d6d6d6;
+   font-size: 0.9em;
+   text-decoration: none;
+   display: block;
+   padding: 5px;
+   transition: all 0,5s ease 0s;
+}
+
+.copyright a:hover, .about a:hover {
+   color: #fff;
+}

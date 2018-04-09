@@ -1,0 +1,5 @@
+.copyright span { margin: 0 1em; display: block; }
+.copyright p { float: left; margin: 0 1em; }
+.copyright > div > span { text-align: center; }
+
+.copyright { background-color: #000; }

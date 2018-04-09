@@ -1,0 +1,154 @@
+p {
+	margin: 0;
+}
+
+ul, label {
+	margin: 0;
+	padding: 0;
+}
+
+a:hover{
+   text-decoration: none;
+}
+
+div {
+   display: block;
+   
+}
+
+span {
+   display: block;
+   clear: both;
+}
+
+li {
+   list-style: none;
+}
+
+div.login {
+   width: 100%;
+   height:100%;
+   position:absolute;
+}
+
+div.login > span {
+   position:absolute; 
+   top:25%;
+   left:25%;
+   width:50%;
+   height:50%;
+   text-align: center;
+}
+
+div.login > span > span {
+   height: 50%;
+}
+
+div.login > span > form {
+   height: 50%;
+}
+
+div.login > span > form > div > div {
+   margin-top: 12px;
+}
+
+header {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+section > div {
+   display: block;
+   clear: both;
+}
+
+section h3, section h5 {
+   padding: 1em;
+   position: relative;
+   margin: 0;
+}
+
+section h3:before, section h5:before {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+div#wrapper {
+   display: table;
+   width: 100%;
+}
+
+div#wrapper section > span {
+   display: block;
+   clear: both;
+   margin: 0.5em 1.5em 0.5em 1.5em;
+}
+
+p.ever {
+   margin: .5em 0 0;
+   line-height: 1.8em;
+   padding-left: 1em;
+   padding-right: 1em;
+}
+
+section.logo {
+   height: 275px;
+}
+
+section.logo span.company {
+   padding-top: 50px;
+   height: 175px;
+   line-height: 125px;
+   text-align: center;
+}
+
+section.logo span.level {
+   height: 100px;
+   line-height: 100px;
+   float: right;
+   margin-right: 5em;
+}
+
+section.logo span.level p {
+   float: left;
+}
+
+section.video video {
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+section.company td.title {
+   width: 15em;
+   text-align: right;
+}
+
+#wrapper > div.col-xs-1 {
+   width: 5%;
+}
+
+#wrapper > div.col-xs-11 {
+   width: 95%;
+}
+
+img.card-img-top {
+   width: 100%;
+   height: 100%;
+}
+
+footer > section.copyright {
+   text-align: center;
+   padding: 1em;
+}
+
+/* special handler */
+#l-law {
+   height: 55px;
+   margin-bottom: 135px;
+   width: 155px;
+}
+/* special handler end */

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}登录{% endblock %}
+{% block content %}
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block; ">
+   <form action="/login/" method="post">
+      <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLongTitle">登录</h5>
+            </div>
+            <div class="modal-body">
+               <div class="form-group row">
+                  <!--<label for="inputUserID" class="col-sm-2 col-form-label">ID</label>-->
+                  <div class="col-sm-12">
+                     <input type="text" class="form-control" id="inputUserID" name="inputUserID" placeholder="User ID">
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <!--<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>-->
+                  <div class="col-sm-12">
+                     <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+         </div>
+      </div>
+   </form>
+</div>
+{% endblock %}
