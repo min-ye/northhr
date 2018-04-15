@@ -19,6 +19,9 @@ class Category(models.Model):
    name = models.CharField(max_length = 256)
    title = models.CharField(max_length = 256)
    code = models.CharField(max_length = 16)
+   comment = models.CharField(max_length = 512, null=True, blank=True)
+   description = models.CharField(max_length = 512, null=True, blank=True)
+   sequence = models.IntegerField(default=0)
 
    def __str__(self):
       return '%s,%s(%s)' % (self.name, self.title, self.code)
@@ -36,10 +39,10 @@ class Register(models.Model):
    comment = models.CharField(max_length = 256, null=True, blank=True)
 
    def __str__(self):
-      return '%s,%s,%s,%s,%s' % (self.user.id, self.person, self.category, self.quantity, self.document_date, self.create_date)
+      return '%s,%s,%s,%s,%s,%s' % (self.user.id, self.person, self.category, self.quantity, self.document_date, self.create_date)
 
    class Meta:
-      ordering = ["person", "category"]
+      ordering = ["person", "category__sequence"]
 
 class Log(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
