@@ -263,7 +263,7 @@ def person_detail(request, id):
          except:
             messages.append("删除失败.")
          
-      register_list = Register.objects.filter(person__id = id)
+      register_list = Register.objects.filter(person__id = id).order_by("category__sequence")
       return render_to_response('person_detail.html', { 'user': request.user, 'person': person, 'registers': register_list, 'messages': messages })
    else:
       url = "/login/"
@@ -401,7 +401,7 @@ def register(request, person_id):
             messages.append("请输入关键字查找材料名称")
          else:
             messages.append("查找 %s " % key_word)
-         category_list = Category.objects.filter(name__contains = key_word)
+         category_list = Category.objects.filter(name__contains = key_word).order_by("sequence")
          form = RegisterForm(initial={'document_date': datetime.datetime.now() })
          form.fields['category'].queryset = category_list
          return render_to_response('register.html', { 'user': request.user, 'key_word': key_word, 'person': person, 'form': form, 'messages': messages })

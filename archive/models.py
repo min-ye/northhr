@@ -27,7 +27,7 @@ class Category(models.Model):
       return '%s,%s(%s)' % (self.name, self.title, self.code)
 
    class Meta:
-      ordering = ["name"]
+      ordering = ["sequence"]
 
 class Register(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
