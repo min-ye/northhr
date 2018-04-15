@@ -24,6 +24,6 @@ class RegisterForm(forms.Form):
    key_word = forms.CharField(max_length = 32, required = False)
    category = forms.ModelChoiceField(queryset=Category.objects.all())
    quantity = forms.IntegerField()
-   document_date = forms.DateField(widget=forms.widgets.SelectDateWidget(years=range(datetime.now().year, datetime.now().year-100, -1)))
+   document_date = forms.DateField() #widget=forms.widgets.SelectDateWidget(years=range(datetime.now().year, datetime.now().year-100, -1))
    comment = forms.CharField(max_length=256, widget=forms.Textarea(attrs={'rows':3, 'cols':50}), required = False)
 
