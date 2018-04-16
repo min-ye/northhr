@@ -7,5 +7,5 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Person)
 admin.site.site_header = "管理平台"
-admin.site.index_template = 'admin/index.html'
-admin.autodiscover()
+#admin.site.index_template = 'admin/index.html'
+#admin.autodiscover()
