@@ -278,7 +278,7 @@ def person_detail(request, id):
          except:
             messages.append("删除失败.")
          
-      register_list = Register.objects.filter(person__id = id).order_by("category__sequence")
+      register_list = Register.objects.filter(person__id = id).order_by("document_date", "category__sequence")
       return render_to_response('person_detail.html', { 'user': request.user, 'person': person, 'registers': register_list, 'messages': messages })
    else:
       url = "/login/"
@@ -474,66 +474,36 @@ def excel(request, person_id):
          url = "/person/unknown/"
          return HttpResponseRedirect(url)
 
-      register_list = Register.objects.filter(person__id = person_id)
+      register_list = Register.objects.filter(person__id = person_id).order_by("document_date", "category__sequence")
       if register_list:
          ws = xlwt.Workbook(encoding='utf-8')
          w = ws.add_sheet(person.name)
 
-         alignment = xlwt.Alignment()
-         alignment.horz = xlwt.Alignment.HORZ_CENTER
-         alignment.vert = xlwt.Alignment.VERT_CENTER
-         style = xlwt.XFStyle()
-         style.alignment = alignment
+         write_sheet(w, register_list)
 
-         borders = xlwt.Borders()
-         borders.left = xlwt.Borders.THIN
-         borders.right = xlwt.Borders.THIN
-         borders.top = xlwt.Borders.THIN
-         borders.bottom = xlwt.Borders.THIN
-         borders.left_colour = 0x40
-         borders.right_colour = 0x40
-         borders.top_colour = 0x40
-         borders.bottom_colour = 0x40
-         style.borders = borders
-
-         row = 0
-         row += 1
-         w.write_merge(0, 1, 0, 0, u"类号", style)
-         w.write_merge(0, 1, 1, 1, u"材料名称", style)
-         w.write_merge(0, 0, 2, 4, u"材料形成时间", style)
-         w.write_merge(0, 1, 5, 5, u"页数", style)
-         w.write_merge(0, 1, 6, 6, u"备注", style)
-
-         w.write(1, 2, u"年", style)
-         w.write(1, 3, u"月", style)
-         w.write(1, 4, u"日", style)
-         row += 1
+         sheet_list = []
          for register in register_list:
             code = register.category.code
-            category = register.category.name
-            year = register.document_date.year
-            month = register.document_date.month
-            day = register.document_date.day
-            quantity = register.quantity
-            comment = register.comment
-            w.write(row, 0, code, style)
-            w.write(row, 1, category, style)
-            w.write(row, 2, year, style)
-            w.write(row, 3, month, style)
-            w.write(row, 4, day, style)
-            w.write(row, 5, quantity, style)
-            w.write(row, 6, comment, style)
-            row += 1
-         logger.info(person.name)
-         w.col(0).width = 2500
-         w.col(1).width = 9000
-         w.col(2).width = 1250
-         w.col(3).width = 1250
-         w.col(4).width = 1250
-         w.col(5).width = 2500
-         w.col(6).width = 5000
+            code_list = code.split('-')
+            code1 = code_list[0]
+            if not code1 in sheet_list:
+               sheet_list.append(code1)
 
-         w.row(row).height = 600
+         sheet_list.sort()
+
+         for sheet in sheet_list:
+            register_sheet = []
+            for register in register_list:
+               code = register.category.code
+               code_list = code.split('-')
+               code1 = code_list[0]
+
+               if (code1 == sheet):
+                  register_sheet.append(register)
+
+            w = ws.add_sheet(sheet)
+            write_sheet(w, register_sheet)
+
 
          now = int(time.time())
          file_name = "%s-%s.xls" % (now, person_id)
@@ -554,6 +524,63 @@ def excel(request, person_id):
       url = "/login/"
       return HttpResponseRedirect(url)
     
+def write_sheet(sheet, register_list):
+   alignment = xlwt.Alignment()
+   alignment.horz = xlwt.Alignment.HORZ_CENTER
+   alignment.vert = xlwt.Alignment.VERT_CENTER
+   style = xlwt.XFStyle()
+   style.alignment = alignment
+
+   borders = xlwt.Borders()
+   borders.left = xlwt.Borders.THIN
+   borders.right = xlwt.Borders.THIN
+   borders.top = xlwt.Borders.THIN
+   borders.bottom = xlwt.Borders.THIN
+   borders.left_colour = 0x40
+   borders.right_colour = 0x40
+   borders.top_colour = 0x40
+   borders.bottom_colour = 0x40
+   style.borders = borders
+
+   row = 0
+   row += 1
+   sheet.write_merge(0, 1, 0, 0, u"类号", style)
+   sheet.write_merge(0, 1, 1, 1, u"材料名称", style)
+   sheet.write_merge(0, 0, 2, 4, u"材料形成时间", style)
+   sheet.write_merge(0, 1, 5, 5, u"页数", style)
+   sheet.write_merge(0, 1, 6, 6, u"备注", style)
+
+   sheet.write(1, 2, u"年", style)
+   sheet.write(1, 3, u"月", style)
+   sheet.write(1, 4, u"日", style)
+   row += 1
+   for register in register_list:
+      code = register.category.code
+      category = register.category.name
+      year = register.document_date.year
+      month = register.document_date.month
+      day = register.document_date.day
+      quantity = register.quantity
+      comment = register.comment
+      sheet.write(row, 0, code, style)
+      sheet.write(row, 1, category, style)
+      sheet.write(row, 2, year, style)
+      sheet.write(row, 3, month, style)
+      sheet.write(row, 4, day, style)
+      sheet.write(row, 5, quantity, style)
+      sheet.write(row, 6, comment, style)
+      row += 1
+
+   sheet.col(0).width = 2500
+   sheet.col(1).width = 9000
+   sheet.col(2).width = 1250
+   sheet.col(3).width = 1250
+   sheet.col(4).width = 1250
+   sheet.col(5).width = 2500
+   sheet.col(6).width = 5000
+
+   sheet.row(row).height = 600
+
 
 def hasNumber(inputString):
    return any(char.isdigit() for char in inputString)

@@ -21,12 +21,12 @@
                <li class="list-group-item">序号: {{person.serial}}</li>
                <li class="list-group-item">身份证号: {{person.id_number}}</li>
                <li class="list-group-item">
-                  <a class="btn btn-outline-secondary" href="/person/edit/{{person.id}}" role="button">修改信息</a>
-                  <a class="btn btn-outline-secondary" href="/register/{{person.id}}" role="button">录入材料</a>
-                  <a class="btn btn-outline-secondary" href="/person/excel/{{person.id}}" role="button">导出Excel</a>
+                  <a class="btn btn-outline-primary" href="/person/edit/{{person.id}}" role="button">修改信息</a>
+                  <a class="btn btn-outline-primary" href="/register/{{person.id}}" role="button">录入材料</a>
+                  <a class="btn btn-outline-primary" href="/person/excel/{{person.id}}" role="button">导出Excel</a>
                   {% if user.is_staff%}
-                  <a class="btn btn-outline-secondary" href="/person/personlog/{{person.id}}" role="button">查看人员信息修改历史</a>
-                  <a class="btn btn-outline-secondary" href="/person/log/{{person.id}}" role="button">查看档案登记修改历史</a>
+                  <a class="btn btn-outline-primary" href="/person/personlog/{{person.id}}" role="button">查看人员信息修改历史</a>
+                  <a class="btn btn-outline-primary" href="/person/log/{{person.id}}" role="button">查看档案登记修改历史</a>
                   {% endif %}
                </li>
             </ul>
@@ -37,6 +37,7 @@
                <thead>
                   <tr>
                      <td>材料名称</td>
+                     <td>材料类号</td>
                      <td>页数</td>
                      <td>材料形成日期</td>
                      <td>备注</td>
@@ -47,6 +48,7 @@
                   {% for register in registers %}
                   <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
                      <td scope="row">{{ register.category.name}}</td>
+                     <td scope="row">{{ register.category.code}}</td>
                      <td scope="row">{{ register.quantity}}</td>
                      <td scope="row">{{ register.document_date}}</td>
                      <td scope="row">{{ register.comment}}</td>

@@ -48,7 +48,7 @@ class Register(models.Model):
       return '%s,%s,%s,%s,%s,%s' % (self.user.id, self.person, self.category, self.quantity, self.document_date, self.create_date)
 
    class Meta:
-      ordering = ["person", "category__sequence"]
+      ordering = ["person", "document_date", "category__sequence"]
 
 class PersonLog(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
