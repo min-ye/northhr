@@ -44,16 +44,22 @@
                   <li class="list-group-item">
                      <div class="input-group">
                         <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">序号</span>
+                        </div>
+                        <input type="text" name="serial" id="serial" value="{{serial}}">
+                     </div>
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
                            <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">身份证号</span>
                         </div>
                         <input type="text" name="id_number" id="id_number" value="{{id_number}}">
                      </div>
                   </li>
                   <li class="list-group-item">
-                     <button type="submit" class="btn btn-primary col-sm-12" name="search">查找</button>
-                  </li>
-                  <li class="list-group-item">
-                     <button type="submit" class="btn btn-primary col-sm-12" name="create">新增</button>
+                     <button type="submit" class="btn btn-outline-success" name="search">查找</button>
+                     <button type="submit" class="btn btn-outline-success" name="create">新增</button>
                   </li>
 
                </ul>
@@ -81,7 +87,7 @@
                      <td scope="row">{{ person.unit}}</td>
                      <td scope="row">{{ person.id_number}}</td>
                      <td>
-                        <a class="btn btn-primary" href="/person/detail/{{person.id}}" role="button">详细信息</a>
+                        <a class="btn btn-outline-secondary btn-sm" href="/person/detail/{{person.id}}" role="button">详细信息</a>
                      </td>
                   </tr>
                   {% endfor %}

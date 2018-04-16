@@ -18,26 +18,29 @@
                <li class="list-group-item">姓名: {{person.name}}</li>
                <li class="list-group-item">编号: {{person.code}}</li>
                <li class="list-group-item">工作单位: {{person.unit}}</li>
+               <li class="list-group-item">序号: {{person.serial}}</li>
                <li class="list-group-item">身份证号: {{person.id_number}}</li>
                <li class="list-group-item">
-                  <a class="btn btn-primary" href="/register/{{person.id}}" role="button">录入材料</a>
-                  <a class="btn btn-primary" href="/person/excel/{{person.id}}" role="button">导出Excel</a>
+                  <a class="btn btn-outline-secondary" href="/person/edit/{{person.id}}" role="button">修改信息</a>
+                  <a class="btn btn-outline-secondary" href="/register/{{person.id}}" role="button">录入材料</a>
+                  <a class="btn btn-outline-secondary" href="/person/excel/{{person.id}}" role="button">导出Excel</a>
                   {% if user.is_staff%}
-                  <a class="btn btn-primary" href="/person/log/{{person.id}}" role="button">查看修改历史</a>
+                  <a class="btn btn-outline-secondary" href="/person/personlog/{{person.id}}" role="button">查看人员信息修改历史</a>
+                  <a class="btn btn-outline-secondary" href="/person/log/{{person.id}}" role="button">查看档案登记修改历史</a>
                   {% endif %}
                </li>
             </ul>
          </span>
 
          <span>
-            <table class="table table-sm">
+            <table class="table table-condensed table-sm">
                <thead>
                   <tr>
-                     <th scope="col">材料名称</th>
-                     <th scope="col">页数</th>
-                     <th scope="col">材料形成日期</th>
-                     <th scope="col">备注</th>
-                     <th scope="col">操作</th>
+                     <td>材料名称</td>
+                     <td>页数</td>
+                     <td>材料形成日期</td>
+                     <td>备注</td>
+                     <td>操作</td>
                   </tr>
                </thead>
                <tbody>
@@ -48,10 +51,10 @@
                      <td scope="row">{{ register.document_date}}</td>
                      <td scope="row">{{ register.comment}}</td>
                      <td>
-                        <form action="" method="post">
+                        <form action="" method="post" style="margin-bottom: 0;">
                            <input type="hidden" id="register_id" name="register_id" value="{{register.id}}">
                            <input type="hidden" id="action" name="action" value="delete">
-                           <input type="submit" class="btn btn-primary" value="删除">
+                           <input type="submit" class="btn btn-outline-success btn-sm" value="删除">
                         </form>
                      </td>
                   </tr>

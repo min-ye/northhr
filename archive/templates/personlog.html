@@ -11,6 +11,7 @@
                {% endfor %}
             </span>
          </nav>
+         {% if person %}
          <span>
             <ul class="list-group">
                <li class="list-group-item">姓名: {{person.name}}</li>
@@ -28,10 +29,11 @@
             <table class="table table-condensed table-sm">
                <thead>
                   <tr>
-                     <td>材料</td>
-                     <td>材料类别</td>
-                     <td>日期</td>
-                     <td>页数</td>
+                     <td>姓名</td>
+                     <td>档案编号</td>
+                     <td>工作单位</td>
+                     <td>序列号</td>
+                     <td>身份证号</td>
                      <td>操作员</td>
                      <td>操作</td>
                      <td>操作日期</td>
@@ -41,12 +43,16 @@
                <tbody>
                   {% for log in log_list %}
                   <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
-                     <td>{{ log.category.name }}</td>
-                     <td>{{ log.category.code }}</td>
-                     <td>{{ log.document_date }}</td>
-                     <td>{{ log.quantity }}</td>
+                     <td>{{ log.name }}</td>
+                     <td>{{ log.code }}</td>
+                     <td>{{ log.unit }}</td>
+                     <td>{{ log.serial }}</td>
+                     <td>{{ log.id_number }}</td>
                      <td>{{ log.user.username }}</td>
-                     <td>{% if log.operation == 'delete' %}删除{% endif %}{%if log.operation == 'create' %}建立{% endif %}</td>
+                     <td>{% if log.operation == 'delete' %}删除{% endif %}
+                     {%if log.operation == 'create' %}建立{% endif %}
+                     {%if log.operation == 'update' %}更新{% endif %}
+                     </td>
                      <td>{{ log.operation_date }}</td>
                      <td>{{ log.operation_time }}</td>
                   </tr>
@@ -54,6 +60,13 @@
                </tbody>
             </table>
          </span>
+         {% else %}
+         <span>
+            <ul class="list-group">
+               <li class="list-group-item"><a class="btn btn-outline-secondary" href="/person/new/" role="button">新增人员</a></li>
+            </ul>
+         </span>
+         {% endif %}
       </section>
    </div>
 </div>

@@ -29,6 +29,7 @@ urlpatterns = [
     #path('category/', views.category, name='category'),
     path('layout/', views.layout, name='layout'),
     path('person/log/<int:person_id>', views.log, name='log'),
+    path('person/personlog/<int:person_id>', views.personlog, name='personlog'),
     #path('form_template_1/', views.form_template_1, name='form_template_1'),
     path('person/detail/<int:id>', views.person_detail, name='person_detail'),
     path('person/search/', views.person_search, name='person_search'),

@@ -10,6 +10,7 @@ class PersonForm(forms.Form):
    name = forms.CharField(max_length = 16)
    code = forms.CharField(max_length = 16)
    unit = forms.CharField(max_length = 128)
+   serial = forms.CharField(max_length = 16, required=False)
    id_number = forms.CharField(max_length = 18, min_length = 18, required=False)
    
 

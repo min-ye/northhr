@@ -14,7 +14,7 @@ import time
 import os
 import io
 from io import StringIO
-from archive.models import Person, Register, Log, Category
+from archive.models import Person, Register, Log, Category, PersonLog
 from archive.forms import PersonForm, RegisterForm
 
 logger = logging.getLogger('django')
@@ -235,6 +235,21 @@ def log(request, person_id):
       url = "/login/"
       return HttpResponseRedirect(url)
 
+def personlog(request, person_id):
+   if request.user.is_authenticated and request.user.is_staff:
+      messages = []
+      try:
+         person = Person.objects.get(id = person_id)
+      except Person.DoesNotExist:
+         url = "/person/unknown/"
+         return HttpResponseRedirect(url)
+      log_list = PersonLog.objects.filter(person__id__contains = person_id).order_by("operation_date", "operation_time")
+         
+      return render_to_response('personlog.html', { 'user': request.user, 'person': person, 'log_list': log_list, 'messages': messages} )
+   else:
+      url = "/login/"
+      return HttpResponseRedirect(url)
+
 #def form_template_1(request):
 #   return render_to_response('form_template_1.html', { })
 
@@ -285,8 +300,17 @@ def person_edit(request, id):
          if form.is_valid():
             data = form.cleaned_data
             try:
-               person = Person(id = id, name = data['name'], code = data['code'], unit = data['unit'], id_number = data['id_number'])
+               person = Person(id = id, name = data['name'], code = data['code'], unit = data['unit'], serial = data['serial'], id_number = data['id_number'])
                person.save()
+               personLog = PersonLog(user = request.user, 
+                  person = person,
+                  name = person.name, 
+                  code = person.code, 
+                  unit = person.unit, 
+                  serial = person.serial,
+                  id_number = person.id_number,
+                  operation = 'update')
+               personLog.save()
                messages.append('保存成功')
                url = "/person/detail/%s" % (id)
                return HttpResponseRedirect(url)
@@ -297,7 +321,7 @@ def person_edit(request, id):
          return render_to_response('person_edit.html', { 'user': request.user, 'form': form, 'messages': messages })
       else:
          messages.append('找到记录')
-         form = PersonForm(initial={'name': person.name, 'code': person.code, 'unit': person.unit, 'id_number': person.id_number })
+         form = PersonForm(initial={'name': person.name, 'code': person.code, 'unit': person.unit, 'serial': person.serial, 'id_number': person.id_number })
          return render_to_response('person_edit.html', { 'user': request.user, 'form': form, 'messages': messages })
    else:
       url = "/login/"
@@ -311,8 +335,17 @@ def person_new(request):
          if form.is_valid():
             data = form.cleaned_data
             try:
-               person = Person(name = data['name'], code = data['code'], unit = data['unit'], id_number = data['id_number'])
+               person = Person(name = data['name'], code = data['code'], unit = data['unit'], serial = data['serial'], id_number = data['id_number'])
                person.save()
+               personLog = PersonLog(user = request.user, 
+                  person = person,
+                  name = person.name, 
+                  code = person.code, 
+                  unit = person.unit, 
+                  serial = person.serial,
+                  id_number = person.id_number,
+                  operation = 'create')
+               personLog.save()
                messages.append("保存成功")
                return render_to_response('person_edit.html', { 'user': request.user, 'person': person, 'messages': messages })
             except:
@@ -325,8 +358,9 @@ def person_new(request):
          name = request.GET.get('name', '')
          code = request.GET.get('code', '')
          unit = request.GET.get('unit', '')
+         serial = request.GET.get('serial', '')
          id_number = request.GET.get('id_number', '')
-         form = PersonForm(initial={'name': name, 'code': code, 'unit': unit, 'id_number': id_number })
+         form = PersonForm(initial={'name': name, 'code': code, 'unit': unit, 'serial': serial, 'id_number': id_number })
          messages.append('新增人员')
          return render_to_response('person_edit.html', { 'user': request.user, 'form': form, 'messages': messages })
    else:
@@ -339,29 +373,36 @@ def person_search(request):
       person_name = request.GET.get('name', '')
       person_code = request.GET.get('code', '')
       person_unit = request.GET.get('unit', '')
+      person_serial = request.GET.get('serial', '')
       person_id_number = request.GET.get('id_number', '')
-      person_list = []
-      if (person_name == ''):
-         messages.append("请输入姓名.")
-         return render_to_response('person_search.html', { 'user': request.user, 'name': person_name, 'code': person_code, 'unit': person_unit, 'id_number': person_id_number, 'messages': messages })
-      else:
-         person_list = Person.objects.filter(name__contains = person_name)
 
-      if (person_code != ''):
-         person_list = person_list.filter(code__contains = person_code)
-
-      if (person_unit != ''):
-         person_list = person_list.filter(unit__contains = person_unit)
-
-      if (person_id_number != ''):
-         person_list = person_list.filter(id_number__contains = person_id_number)
-
-      if 'search' in request.GET:
-         messages.append("找到%s条记录." % person_list.count())
-         return render_to_response('person_search.html', { 'user': request.user, 'name': person_name, 'code': person_code, 'unit': person_unit, 'id_number': person_id_number, 'person_list': person_list, 'messages': messages })
-      else:
-         url = "/person/new?name=%s&code=%s&unit=%s&id_number=%s" % (person_name, person_code, person_unit, person_id_number)
+      if 'create' in request.GET:
+         url = "/person/new?name=%s&code=%s&unit=%s&serial=%s&id_number=%s" % (person_name, person_code, person_unit, person_serial, person_id_number)
          return HttpResponseRedirect(url)
+      else:
+         person_list = []
+
+         if (person_name == ''):
+            messages.append("请输入姓名.")
+            return render_to_response('person_search.html', { 'user': request.user, 'name': person_name, 'code': person_code, 'unit': person_unit, 'serial': person_serial, 'id_number': person_id_number, 'messages': messages })
+         else:
+            person_list = Person.objects.filter(name__contains = person_name)
+
+         if (person_code != ''):
+            person_list = person_list.filter(code__contains = person_code)
+
+         if (person_unit != ''):
+            person_list = person_list.filter(unit__contains = person_unit)
+
+         if (person_serial != ''):
+            person_list = person_list.filter(serial__contains = person_serial)
+
+         if (person_id_number != ''):
+            person_list = person_list.filter(id_number__contains = person_id_number)
+
+         messages.append("找到%s条记录." % person_list.count())
+         return render_to_response('person_search.html', { 'user': request.user, 'name': person_name, 'code': person_code, 'unit': person_unit, 'serial': person_serial, 'id_number': person_id_number, 'person_list': person_list, 'messages': messages })
+         
 
    else:
       url = "/login/"
@@ -384,10 +425,24 @@ def register(request, person_id):
             #category_list = Category.objects.filter(name__contains = data.field['key_word'])
             #form.fields['category'].queryset = category_list
             try:
-               register = Register(user = request.user, person = person, category = data['category'], quantity = data['quantity'], document_date = data['document_date'], create_date = datetime.datetime.now(), comment = data['comment'])
+               register = Register(user = request.user, 
+                  person = person, 
+                  category = data['category'], 
+                  quantity = data['quantity'], 
+                  document_date = data['document_date'], 
+                  create_date = datetime.datetime.now(), 
+                  comment = data['comment'])
                register.save()
                messages.append('保存成功')
-               log = Log(user = request.user, person = register.person, category = register.category, quantity = register.quantity, document_date = data['document_date'], create_date = datetime.datetime.now(), comment = data['comment'], operation = 'create')
+               log = Log(
+                  user = request.user, 
+                  person = register.person, 
+                  category = register.category, 
+                  quantity = register.quantity, 
+                  document_date = data['document_date'], 
+                  create_date = datetime.datetime.now(), 
+                  comment = data['comment'], 
+                  operation = 'create')
                log.save()
                form = RegisterForm(initial={'document_date': datetime.datetime.now() })
             except:
@@ -447,6 +502,7 @@ def excel(request, person_id):
          w.write_merge(0, 1, 1, 1, u"材料名称", style)
          w.write_merge(0, 0, 2, 4, u"材料形成时间", style)
          w.write_merge(0, 1, 5, 5, u"页数", style)
+         w.write_merge(0, 1, 6, 6, u"备注", style)
 
          w.write(1, 2, u"年", style)
          w.write(1, 3, u"月", style)
@@ -459,12 +515,14 @@ def excel(request, person_id):
             month = register.document_date.month
             day = register.document_date.day
             quantity = register.quantity
+            comment = register.comment
             w.write(row, 0, code, style)
             w.write(row, 1, category, style)
             w.write(row, 2, year, style)
             w.write(row, 3, month, style)
             w.write(row, 4, day, style)
             w.write(row, 5, quantity, style)
+            w.write(row, 6, comment, style)
             row += 1
          logger.info(person.name)
          w.col(0).width = 2500
@@ -473,6 +531,7 @@ def excel(request, person_id):
          w.col(3).width = 1250
          w.col(4).width = 1250
          w.col(5).width = 2500
+         w.col(6).width = 5000
 
          w.row(row).height = 600
 

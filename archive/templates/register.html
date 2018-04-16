@@ -17,6 +17,7 @@
                <a class="nav-link disabled" href="#">姓名: {{person.name}}</a>
                <a class="nav-link disabled" href="#">编号: {{person.code}}</a>
                <a class="nav-link disabled" href="#">工作单位: {{person.unit}}</a>
+               <a class="nav-link disabled" href="#">序号: {{person.serial}}</a>
                <a class="nav-link disabled" href="#">身份证号: {{person.id_number}}</a>
             </nav>
          </span>
@@ -26,7 +27,7 @@
                <div class="input-group mb-3">
                   <input type="text" class="form-control" placeholder="材料名称关键字" name="key_word" value="{{key_word}}">
                   <div class="input-group-append">
-                     <input class="btn btn-primary" type="submit"></button>
+                     <input class="btn btn-outline-success" type="submit"></button>
                   </div>
                </div>
             </form>
@@ -81,8 +82,8 @@
                      {% endfor %}
                   </li>
                   <li class="list-group-item">
-                     <button type="submit" class="btn btn-primary">提交</button>
-                     <a class="btn btn-primary" href="/person/detail/{{person.id}}">返回人员信息</a>
+                     <button type="submit" class="btn btn-outline-success">提交</button>
+                     <a class="btn btn-outline-secondary" href="/person/detail/{{person.id}}">返回人员信息</a>
                   </li>
                </ul>
                
