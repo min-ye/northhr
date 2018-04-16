@@ -36,9 +36,9 @@ class Category(models.Model):
 
 
 class Register(models.Model):
-   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
-   person = models.ForeignKey(Person, on_delete=models.PROTECT,)
-   category = models.ForeignKey(Category, on_delete=models.PROTECT,)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+   person = models.ForeignKey(Person, on_delete=models.PROTECT)
+   category = models.ForeignKey(Category, on_delete=models.PROTECT)
    quantity = models.IntegerField()
    document_date= models.DateField()
    create_date = models.DateTimeField()
@@ -51,7 +51,7 @@ class Register(models.Model):
       ordering = ["person", "document_date", "category__sequence"]
 
 class PersonLog(models.Model):
-   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
    person = models.ForeignKey(Person, on_delete=models.PROTECT)
    name = models.CharField(max_length=16)
    code = models.CharField(max_length=16)
