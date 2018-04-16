@@ -33,6 +33,10 @@ section 25 {
    color: #d6d6d6;
 }
 
+table tbody {
+   font-size: 0.79em;
+}
+
 .copyright a, .about a {
    color: #d6d6d6;
    font-size: 0.9em;
