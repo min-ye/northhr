@@ -39,7 +39,7 @@ class Register(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
    person = models.ForeignKey(Person, on_delete=models.PROTECT)
    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-   category_code = models.CharField(max_length = 5)
+   category_code = models.CharField(max_length = 5, null=True, blank=True)
    quantity = models.IntegerField()
    document_date= models.DateField()
    create_date = models.DateTimeField()
