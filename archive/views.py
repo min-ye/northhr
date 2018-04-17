@@ -16,6 +16,7 @@ import io
 from io import StringIO
 from archive.models import Person, Register, Log, Category, PersonLog
 from archive.forms import PersonForm, RegisterForm
+import re
 
 logger = logging.getLogger('django')
 
@@ -489,7 +490,7 @@ def excel(request, person_id):
             if not code1 in sheet_list:
                sheet_list.append(code1)
 
-         sheet_list.sort()
+         sheet_list.sort(key = lambda x:x.zfill(5))
 
          for sheet in sheet_list:
             register_sheet = []
