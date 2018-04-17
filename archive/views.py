@@ -67,160 +67,6 @@ def logout(request):
     auth.logout(request)  
     return render_to_response('login.html', { 'message': '退出登录成功' })
 
-'''
-def register(request, person_id):
-   if request.user.is_authenticated:
-      step = request.POST.get('step', '')
-
-      if (step == ''):
-         return render_to_response('register.html', { 'user': request.user, 'step': 1 })
-      else:
-         if (step == '1'):
-            person_id_number = request.POST.get('person_id_number', '')
-            if (person_id_number == ''):
-               message = "请输入身份证号."
-               return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-            elif (len(person_id_number) != 18):
-               message = "请输入18位身份证号."
-               return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-            else:
-               try:
-                  person = Person.objects.get(id_number = person_id_number)
-                  message = "身份证号已存在."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-               except Person.DoesNotExist:
-                  message = "身份证号不存在.请输入姓名."
-                  person = Person(id_number = person_id_number, name = '')
-                  return render_to_response('register.html', { 'user': request.user, 'step': 2, 'person': person, 'message': message })
-
-         elif (step == '2'):
-            person_id_number = request.POST.get('person_id_number', '')
-            person_name = request.POST.get('person_name', '')
-            logger.info(person_id_number)
-            logger.info(person_name)
-            if (person_id_number == ''):
-               message = "信息丢失, 请重新输入身份证号."
-               return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-            elif (person_name == ''):
-               message = "姓名不能为空."
-               person = Person(id_number = person_id_number, name = '')
-               return render_to_response('register.html', { 'user': request.user, 'step': 2, 'person': person, 'message': message })
-            else:
-               message = '新记录已保存. 请输入材料关键字.'
-               person = Person(id_number = person_id_number, name = person_name)
-               person.save()
-               return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-
-         elif (step == '3'):
-            person_id_number = request.POST.get('person_id_number', '')
-            person_name = request.POST.get('person_name', '')
-            person_id = request.POST.get('person_id', '')
-            category_name = request.POST.get('category_name', '')
-            try:
-               person_id = int(person_id)
-               person = Person(id = person_id, name = person_name, id_number = person_id_number)
-            except:
-               message = "信息丢失, 请重新输入身份证号."
-               return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-            else:
-               if (category_name == ''):
-                  message = "请输入材料关键字."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-               else:
-                  category_list = Category.objects.filter(name__contains = category_name)
-                  if ( len(category_list) == 0 ):
-                     message = "未找到相关记录."
-                     return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-                  else:
-                     message = "请选择材料并输入页数."
-                     return render_to_response('register.html', { 'user': request.user, 'step': 4, 'person': person, 'category_list': category_list, 'message': message })
-
-         elif (step == '4' or step == '5'):
-            person_id_number = request.POST.get('person_id_number', '')
-            person_name = request.POST.get('person_name', '')
-            person_id = request.POST.get('person_id', '')
-            category_id = request.POST.get('category_id', '')
-            quantity = request.POST.get('quantity', '')
-            try:
-               person_id = int(person_id)
-               person = Person(id = person_id, name = person_name, id_number = person_id_number)
-            except:
-               message = "信息丢失, 保存失败, 请重新输入身份证号."
-               return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-            else:
-               try:
-                  category_id = int(category_id)
-               except:
-                  message = "信息丢失, 保存失败, 请重新输入材料关键字."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-
-               try:
-                  category = Category.objects.get(id = category_id)
-               except Category.DoesNotExist:
-                  message = "未找到相关记录, 保存失败, 请重新输入材料关键字."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 3, 'person': person, 'message': message })
-
-               try:
-                  quantity = int(quantity)
-               except:
-                  message = "在页数字段请输入数字."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 5, 'person': person, 'category': category, 'message': message })
-
-               try:
-                  register = Register(user = request.user, person = person, category = category, quantity = quantity)
-                  register.save()
-                  log = Log(user = request.user, person = person, category = category, quantity = quantity, operation = 'create')
-                  log.save()
-                  message = "保存成功."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 6, 'person': person, 'category': category, 'register': register, 'message': message })
-               except:
-                  message = "保存失败."
-                  return render_to_response('register.html', { 'user': request.user, 'step': 1, 'message': message })
-
-   else:
-      return render_to_response('login.html', { })
-'''
-
-'''
-def category(request):
-   if request.user.is_authenticated:
-      if request.method == 'POST':
-         register_id = request.POST.get('register_id', '')
-         try:
-            register_id = int(register_id)
-            register = Register.objects.get(id = register_id)
-            register.delete()
-            log = Log(user = request.user, person = register.person, category = register.category, quantity = register.quantity, operation = 'delete')
-            log.save()
-            message = "删除成功."
-         except:
-            message = "删除失败."
-         person_information = request.GET.get('person_information', '')
-         if (person_information != ''):
-            if (hasNumber(person_information)):
-               register_list = Register.objects.filter(person__id_number__contains = person_information)
-            else:
-               register_list = Register.objects.filter(person__name__contains = person_information)
-            return render_to_response('category.html', { 'user': request.user, 'information': person_information, 'register_list': register_list, 'message': message} )
-         else:
-            return render_to_response('category.html', { 'user': request.user, 'message': message} )
-      else:
-         person_information = request.GET.get('person_information', '')
-         if (person_information != ''):
-            if (hasNumber(person_information)):
-               register_list = Register.objects.filter(person__id_number__contains = person_information)
-               message = "查找身份证 '%s'" % (person_information)
-            else:
-               register_list = Register.objects.filter(person__name__contains = person_information)
-               message = "查找姓名 '%s'" % (person_information)
-            return render_to_response('category.html', { 'user': request.user, 'information': person_information, 'register_list': register_list, 'message': message} )
-         else:
-            message = "请输入姓名查找相关的记录"
-            return render_to_response('category.html', { 'user': request.user, 'message': message })
-   else:
-      return render_to_response('login.html', { })
-'''
-
 def log(request, person_id):
    if request.user.is_authenticated and request.user.is_staff:
       messages = []
@@ -271,7 +117,7 @@ def person_detail(request, id):
             category_name = register.category.name
             document_date = register.document_date
             register.delete()
-            log = Log(user = request.user, person = register.person, category = register.category, quantity = register.quantity, document_date = register.document_date, create_date = register.create_date, comment = register.comment, operation = 'delete')
+            log = Log(user = request.user, person = register.person, category = register.category, quantity = register.quantity, document_date = register.document_date, sequence = register.sequence, create_date = register.create_date, comment = register.comment, operation = 'delete')
             log.save()
             date = document_date.strftime("%Y-%m-%d")
             message = "%s %s 删除成功." % (category_name, date)
@@ -279,7 +125,7 @@ def person_detail(request, id):
          except:
             messages.append("删除失败.")
          
-      register_list = Register.objects.filter(person__id = id).order_by("document_date", "category__sequence")
+      register_list = Register.objects.filter(person__id = id).order_by("document_date", "category_code", "sequence")
       return render_to_response('person_detail.html', { 'user': request.user, 'person': person, 'registers': register_list, 'messages': messages })
    else:
       url = "/login/"
@@ -426,11 +272,15 @@ def register(request, person_id):
             #category_list = Category.objects.filter(name__contains = data.field['key_word'])
             #form.fields['category'].queryset = category_list
             try:
+               category_code = data['category'].code.split('-')[0].zfill(5)
+               logger.info(category_code)
                register = Register(user = request.user, 
                   person = person, 
                   category = data['category'], 
+                  category_code = category_code,
                   quantity = data['quantity'], 
                   document_date = data['document_date'], 
+                  sequence = data['sequence'],
                   create_date = datetime.datetime.now(), 
                   comment = data['comment'])
                register.save()
@@ -441,6 +291,7 @@ def register(request, person_id):
                   category = register.category, 
                   quantity = register.quantity, 
                   document_date = data['document_date'], 
+                  sequence = data['sequence'],
                   create_date = datetime.datetime.now(), 
                   comment = data['comment'], 
                   operation = 'create')
@@ -475,7 +326,7 @@ def excel(request, person_id):
          url = "/person/unknown/"
          return HttpResponseRedirect(url)
 
-      register_list = Register.objects.filter(person__id = person_id).order_by("document_date", "category__sequence")
+      register_list = Register.objects.filter(person__id = person_id).order_by("document_date", "category_code", "sequence")
       if register_list:
          ws = xlwt.Workbook(encoding='utf-8')
          w = ws.add_sheet(person.name)

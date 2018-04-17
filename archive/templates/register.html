@@ -77,7 +77,18 @@
                         </div>
                         {{ form.comment }}
                      </div>
-                     {% for error in form.document_date.errors %}
+                     {% for error in form.comment.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">序号</span>
+                        </div>
+                        {{ form.sequence }}
+                     </div>
+                     {% for error in form.sequence.errors %}
                         <p>{{ error }}</p>
                      {% endfor %}
                   </li>

@@ -39,16 +39,18 @@ class Register(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
    person = models.ForeignKey(Person, on_delete=models.PROTECT)
    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+   category_code = models.CharField(max_length = 5)
    quantity = models.IntegerField()
    document_date= models.DateField()
    create_date = models.DateTimeField()
+   sequence = models.IntegerField(default=0)
    comment = models.CharField(max_length = 256, null=True, blank=True)
 
    def __str__(self):
       return '%s,%s,%s,%s,%s,%s' % (self.user.id, self.person, self.category, self.quantity, self.document_date, self.create_date)
 
    class Meta:
-      ordering = ["person", "document_date", "category__sequence"]
+      ordering = ["person", "document_date", "category_code", "sequence"]
 
 class PersonLog(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
@@ -75,6 +77,7 @@ class Log(models.Model):
    category = models.ForeignKey(Category, on_delete=models.PROTECT,)
    quantity = models.IntegerField()
    document_date= models.DateField()
+   sequence = models.IntegerField()
    create_date = models.DateTimeField()
    comment = models.CharField(max_length = 256, null=True, blank=True)
    operation_date = models.DateField('', auto_now = True)
