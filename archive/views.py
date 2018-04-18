@@ -269,36 +269,38 @@ def register(request, person_id):
 
          if form.is_valid():
             data = form.cleaned_data
-            #category_list = Category.objects.filter(name__contains = data.field['key_word'])
-            #form.fields['category'].queryset = category_list
+            category_code = data['category'].code.split('-')[0].zfill(5)
             try:
-               category_code = data['category'].code.split('-')[0].zfill(5)
-               logger.info(category_code)
+               sequence = int(data['sequence'])
+            except:
+               sequence = 0
+
+            try:
                register = Register(user = request.user, 
                   person = person, 
                   category = data['category'], 
                   category_code = category_code,
                   quantity = data['quantity'], 
                   document_date = data['document_date'], 
-                  sequence = data['sequence'],
+                  sequence = sequence,
                   create_date = datetime.datetime.now(), 
                   comment = data['comment'])
                register.save()
-               messages.append('保存成功')
+               messages.append('记录保存成功')
                log = Log(
                   user = request.user, 
                   person = register.person, 
                   category = register.category, 
                   quantity = register.quantity, 
                   document_date = data['document_date'], 
-                  sequence = data['sequence'],
+                  sequence = sequence,
                   create_date = datetime.datetime.now(), 
                   comment = data['comment'], 
                   operation = 'create')
                log.save()
                form = RegisterForm(initial={'document_date': datetime.datetime.now() })
             except:
-               messages.append("保存失败")
+               messages.append("Log保存失败")
          else:
             messages.append('请检查输入数据')
          return render_to_response('register.html', { 'user': request.user, 'person': person, 'form': form, 'messages': messages })
