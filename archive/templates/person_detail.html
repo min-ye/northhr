@@ -39,6 +39,7 @@
                      <td>材料名称</td>
                      <td>材料类号</td>
                      <td>页数</td>
+                     <td>关系</td>
                      <td>材料形成日期</td>
                      <td>备注</td>
                      <td>操作</td>
@@ -47,11 +48,20 @@
                <tbody>
                   {% for register in registers %}
                   <tr role="button" data-toggle="modal" data-target="#import-tax-row1">
-                     <td scope="row">{{ register.category.name}}</td>
-                     <td scope="row">{{ register.category.code}}</td>
-                     <td scope="row">{{ register.quantity}}</td>
-                     <td scope="row">{{ register.document_date}}</td>
-                     <td scope="row">{{ register.comment}}</td>
+                     <td scope="row">{{ register.archive_name }}</td>
+                     <td scope="row">{{ register.category.code }}</td>
+                     <td scope="row">{{ register.quantity }}</td>
+                     <td scope="row">
+                        {% if register.relationship == '1' %}
+                        本人
+                        {% elif register.relationship == '2' %}
+                        夫妻
+                        {% else %}
+                        父母
+                        {% endif %}
+                     </td>
+                     <td scope="row">{{ register.document_date }}</td>
+                     <td scope="row">{{ register.comment }}</td>
                      <td>
                         <form action="" method="post" style="margin-bottom: 0;">
                            <input type="hidden" id="register_id" name="register_id" value="{{register.id}}">

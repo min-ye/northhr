@@ -14,7 +14,7 @@ import time
 import os
 import io
 from io import StringIO
-from archive.models import Person, Register, Log, Category, PersonLog
+from archive.models import Person, Register, Log, Heading, Category, Archive, PersonLog
 from archive.forms import PersonForm, RegisterForm
 import re
 
@@ -27,12 +27,6 @@ def layout(request):
    else:
       form = PersonForm()
    return render_to_response('layout.html', { 'form': form })
-
-#def index(request):
-#   if request.user.is_authenticated:
-#      return render_to_response('index.html', { 'user': request.user })
-#   else:
-#      return HttpResponseRedirect('/login')  
 
 def login(request):
    username = request.POST.get('inputUserID', '')
@@ -97,9 +91,6 @@ def personlog(request, person_id):
       url = "/login/"
       return HttpResponseRedirect(url)
 
-#def form_template_1(request):
-#   return render_to_response('form_template_1.html', { })
-
 def person_detail(request, id):
    if request.user.is_authenticated:
       messages = []
@@ -114,18 +105,18 @@ def person_detail(request, id):
          try:
             register_id = int(register_id)
             register = Register.objects.get(id = register_id)
-            category_name = register.category.name
+            archive_name = register.archive_name
             document_date = register.document_date
             register.delete()
-            log = Log(user = request.user, person = register.person, category = register.category, quantity = register.quantity, document_date = register.document_date, sequence = register.sequence, create_date = register.create_date, comment = register.comment, operation = 'delete')
+            log = Log(user = request.user, person = register.person, archive_name = register.archive_name, category = register.category, quantity = register.quantity, document_date = register.document_date, sequence = register.sequence, create_date = register.create_date, relationship = register.relationship, comment = register.comment, operation = 'delete')
             log.save()
             date = document_date.strftime("%Y-%m-%d")
-            message = "%s %s 删除成功." % (category_name, date)
+            message = "%s %s 删除成功." % (archive_name, date)
             messages.append(message)
          except:
             messages.append("删除失败.")
          
-      register_list = Register.objects.filter(person__id = id).order_by("document_date", "category_code", "sequence")
+      register_list = Register.objects.filter(person__id = id).order_by("document_date", "sequence")
       return render_to_response('person_detail.html', { 'user': request.user, 'person': person, 'registers': register_list, 'messages': messages })
    else:
       url = "/login/"
@@ -269,32 +260,38 @@ def register(request, person_id):
 
          if form.is_valid():
             data = form.cleaned_data
-            category_code = data['category'].code.split('-')[0].zfill(5)
             try:
                sequence = int(data['sequence'])
             except:
                sequence = 0
 
+            logger.info(sequence)
+            register = Register(user = request.user, 
+               person = person, 
+               archive_name = data['archive_name'],
+               category = data['category'],
+               quantity = data['quantity'], 
+               document_date = data['document_date'], 
+               create_date = datetime.datetime.now(), 
+               sequence = sequence,
+               relationship = data['relationship'],
+               comment = data['comment'])
+            register.save()
             try:
-               register = Register(user = request.user, 
-                  person = person, 
-                  category = data['category'], 
-                  category_code = category_code,
-                  quantity = data['quantity'], 
-                  document_date = data['document_date'], 
-                  sequence = sequence,
-                  create_date = datetime.datetime.now(), 
-                  comment = data['comment'])
-               register.save()
+               logger.info(data['category'].id)
+               logger.info(data['relationship'])
+               
                messages.append('记录保存成功')
                log = Log(
                   user = request.user, 
-                  person = register.person, 
+                  person = register.person,
+                  archive_name = register.archive_name,
                   category = register.category, 
                   quantity = register.quantity, 
                   document_date = data['document_date'], 
                   sequence = sequence,
                   create_date = datetime.datetime.now(), 
+                  relationship = register.relationship,
                   comment = data['comment'], 
                   operation = 'create')
                log.save()
@@ -303,18 +300,27 @@ def register(request, person_id):
                messages.append("Log保存失败")
          else:
             messages.append('请检查输入数据')
-         return render_to_response('register.html', { 'user': request.user, 'person': person, 'form': form, 'messages': messages })
+         
+         key_word = request.GET.get('key_word', '')
+         
+         category_list = Category.objects.all().order_by("sequence")
+         archive_list = Archive.objects.filter(name__contains = key_word).order_by("sequence")
+
+         form = RegisterForm(initial={'document_date': datetime.datetime.now() })
+         form.fields['category'].queryset = category_list
+         return render_to_response('register.html', { 'user': request.user, 'key_word': key_word, 'person': person, 'archive_list': archive_list, 'form': form, 'messages': messages })
       else:
          key_word = request.GET.get('key_word', '')
          if (key_word == ''):
             messages.append("请输入关键字查找材料名称")
          else:
             messages.append("查找 %s " % key_word)
-         category_list = Category.objects.filter(name__contains = key_word).order_by("sequence")
+         category_list = Category.objects.all().order_by("sequence")
+         archive_list = Archive.objects.filter(name__contains = key_word).order_by("sequence")
+
          form = RegisterForm(initial={'document_date': datetime.datetime.now() })
          form.fields['category'].queryset = category_list
-         return render_to_response('register.html', { 'user': request.user, 'key_word': key_word, 'person': person, 'form': form, 'messages': messages })
-
+         return render_to_response('register.html', { 'user': request.user, 'key_word': key_word, 'person': person, 'archive_list': archive_list, 'form': form, 'messages': messages })
    else:
       url = "/login/"
       return HttpResponseRedirect(url)
@@ -328,7 +334,7 @@ def excel(request, person_id):
          url = "/person/unknown/"
          return HttpResponseRedirect(url)
 
-      register_list = Register.objects.filter(person__id = person_id).order_by("document_date", "category_code", "sequence")
+      register_list = Register.objects.filter(person__id = person_id).order_by("document_date", "category__code", "sequence")
       if register_list:
          ws = xlwt.Workbook(encoding='utf-8')
          w = ws.add_sheet(person.name)
@@ -336,6 +342,12 @@ def excel(request, person_id):
          write_sheet(w, register_list)
 
          sheet_list = []
+         #for code in Category.objects.values('code').order_by('code').distinct():
+         #   code_list = code.split('-')
+         #   code1 = code_list[0]
+         #   if not code1 in sheet_list:
+         #      sheet_list.append(code1)
+
          for register in register_list:
             code = register.category.code
             code_list = code.split('-')
@@ -410,7 +422,7 @@ def write_sheet(sheet, register_list):
    row += 1
    for register in register_list:
       code = register.category.code
-      category = register.category.name
+      category = register.archive_name
       year = register.document_date.year
       month = register.document_date.month
       day = register.document_date.day

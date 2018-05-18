@@ -16,6 +16,7 @@
       <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
       <script src="{% static 'js/bootstrap.min.js' %}"> </script>
       <script src="{% static 'js/layout.js' %}"> </script>
+      
       <!-- global end -->
    </head>
    <body>
@@ -23,4 +24,5 @@
       {% block content %}{% endblock %}
       {% block footer %}{% endblock %}
    </body>
+   {% block script %}{% endblock %}
 </html>

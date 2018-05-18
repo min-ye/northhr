@@ -17,17 +17,45 @@ class Person(models.Model):
       verbose_name_plural = '人员管理'
       ordering = ["unit", "name"]
 
+class Heading(models.Model):
+   name = models.CharField(max_length = 256, verbose_name='大类名称')
+   chinese_code = models.CharField(max_length = 8, verbose_name='中文编号')
+   code = models.CharField(max_length = 8, verbose_name='编号')
+   sequence = models.IntegerField(default=0, verbose_name='序号')
+
+   def __str__(self):
+      return '%s(%s)' % (self.name, self.code)
+
+   class Meta:
+      verbose_name = '材料大类'
+      verbose_name_plural= '材料大类'
+      ordering = ["sequence"]
 
 class Category(models.Model):
+   heading = models.ForeignKey(Heading, on_delete=models.PROTECT, verbose_name='材料大类')
+   name = models.CharField(max_length = 256, verbose_name='子类名称')
+   code = models.CharField(max_length = 8, verbose_name='编号')
+   sequence = models.IntegerField(default=0, verbose_name='序号')
+
+   def __str__(self):
+      return '%s(%s)' % (self.name, self.code)
+
+   class Meta:
+      verbose_name = '材料子类'
+      verbose_name_plural= '材料子类'
+      ordering = ['sequence']
+
+
+class Archive(models.Model):
+   category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='材料子类')
    name = models.CharField(max_length = 256, verbose_name='材料名称')
-   title = models.CharField(max_length = 256, verbose_name='十大类')
-   code = models.CharField(max_length = 16, verbose_name='类别号')
+   #code = models.CharField(max_length = 16, verbose_name='类别号')
    comment = models.CharField(max_length = 512, null=True, blank=True, verbose_name='备注')
    description = models.CharField(max_length = 512, null=True, blank=True, verbose_name='说明')
    sequence = models.IntegerField(default=0, verbose_name='序号')
 
    def __str__(self):
-      return '%s,%s(%s)' % (self.name, self.title, self.code)
+      return '%s,%s(%s)' % (self.category.name, self.name, self.sequence)
 
    class Meta:
       verbose_name = '材料名称'
@@ -38,19 +66,20 @@ class Category(models.Model):
 class Register(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
    person = models.ForeignKey(Person, on_delete=models.PROTECT)
+   archive_name = models.CharField(max_length = 256, null=True, blank=True)
    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-   category_code = models.CharField(max_length = 5, null=True, blank=True)
    quantity = models.IntegerField()
    document_date= models.DateField()
    create_date = models.DateTimeField()
    sequence = models.IntegerField(default=0)
+   relationship = models.CharField(max_length = 1, null=True, blank=True)
    comment = models.CharField(max_length = 256, null=True, blank=True)
 
    def __str__(self):
-      return '%s,%s,%s,%s,%s,%s' % (self.user.id, self.person, self.category, self.quantity, self.document_date, self.create_date)
+      return '%s,%s,%s,%s,%s,%s' % (self.user.id, self.person, self.archive_name, self.quantity, self.document_date, self.create_date)
 
    class Meta:
-      ordering = ["person", "document_date", "category_code", "sequence"]
+      ordering = ["person", "document_date", "sequence"]
 
 class PersonLog(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
@@ -74,18 +103,20 @@ class PersonLog(models.Model):
 class Log(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,)
    person = models.ForeignKey(Person, on_delete=models.PROTECT,)
-   category = models.ForeignKey(Category, on_delete=models.PROTECT,)
+   archive_name = models.CharField(max_length = 256, null=True, blank=True)
+   category = models.ForeignKey(Category, on_delete=models.PROTECT)
    quantity = models.IntegerField()
    document_date= models.DateField()
    sequence = models.IntegerField()
    create_date = models.DateTimeField()
+   relationship = models.CharField(max_length = 1, null=True, blank=True)
    comment = models.CharField(max_length = 256, null=True, blank=True)
    operation_date = models.DateField('', auto_now = True)
    operation_time = models.TimeField('', auto_now = True)
    operation = models.CharField(max_length = 16)
 
    def __str__(self):
-      return '%s,%s, %s, %s, %s, %s, %s' % (self.user.id, self.person.id, self.category.id, self.quantity, self.operation_date, self.operation_time, self.operation)
+      return '%s,%s, %s, %s, %s, %s, %s' % (self.user.id, self.person.id, self.archive_name, self.quantity, self.operation_date, self.operation_time, self.operation)
 
    class Meta:
       ordering = ["person", "operation_date", "operation_time"]

@@ -22,10 +22,15 @@ class PersonForm(forms.Form):
    #   return name
 
 class RegisterForm(forms.Form):
-   key_word = forms.CharField(max_length = 32, required = False)
+   key_word = forms.CharField(max_length=32, required = False)
+   #category = forms.ModelChoiceField(queryset=Category.objects.all())
+   archive_name = forms.CharField(max_length=256, widget=forms.TextInput(attrs={'style': 'width: 55em; '}), required = True)
    category = forms.ModelChoiceField(queryset=Category.objects.all())
    quantity = forms.IntegerField()
-   document_date = forms.DateField() #widget=forms.widgets.SelectDateWidget(years=range(datetime.now().year, datetime.now().year-100, -1))
+   document_date = forms.DateField(widget=forms.DateInput(format = '%Y%m%d'), 
+                                 input_formats=('%Y%m%d',)) #widget=forms.widgets.SelectDateWidget(years=range(datetime.now().year, datetime.now().year-100, -1))
+   RELATIONSHIP_OPTION = (('1', '本人'),('2', '夫妻'),('3', '父母'))
+   relationship = forms.ChoiceField(choices=RELATIONSHIP_OPTION, initial='1', widget=forms.RadioSelect())
    sequence = forms.IntegerField(required=False)
    comment = forms.CharField(max_length=256, widget=forms.Textarea(attrs={'rows':3, 'cols':50}), required = False)
 

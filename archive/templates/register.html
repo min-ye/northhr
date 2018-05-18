@@ -24,12 +24,24 @@
          
          <span>
             <form action="" method="get">
+               
                <div class="input-group mb-3">
                   <input type="text" class="form-control" placeholder="材料名称关键字" name="key_word" value="{{key_word}}">
                   <div class="input-group-append">
                      <button class="btn btn-outline-success" type="submit">查找</button>
                   </div>
                </div>
+            
+            
+               <div class="input-group mb-3">
+                  <select id="archive_option">
+                     {% for archive in archive_list %}
+                     <option value="{{ archive.category.id}}">{{archive.name}}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+            
+            
             </form>
          </span>
          <span>
@@ -39,9 +51,21 @@
                   <li class="list-group-item">
                      <div class="input-group">
                         <div class="input-group-prepend">
-                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">材料名称</span>
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">分类</span>
                         </div>
                         {{ form.category }}
+                     </div>
+                     {% for error in form.category.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">材料名称</span>
+                        </div>
+                        {{ form.archive_name }}
                      </div>
                      {% for error in form.category.errors %}
                         <p>{{ error }}</p>
@@ -67,6 +91,22 @@
                         {{ form.document_date }}
                      </div>
                      {% for error in form.document_date.errors %}
+                        <p>{{ error }}</p>
+                     {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                     <div class="input-group">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text" style="display: block; width: 7.5em; text-align: right; ">关系</span>
+                        </div>
+                        {% for radio in form.relationship %}
+                           <label class="btn">
+                              {{ radio.tag }}
+                              {{ radio.choice_label }}
+                           </label>
+                        {% endfor %}
+                     </div>
+                     {% for error in form.relationship.errors %}
                         <p>{{ error }}</p>
                      {% endfor %}
                   </li>
@@ -106,3 +146,14 @@
 </div>
 {% endblock %}
 {% block footer %}{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function () {
+   $('#archive_option').click(function () {
+      $('#id_archive_name').val($('#archive_option option:selected').text());
+      $('#id_category').val($('#archive_option option:selected').val());
+   })
+});
+</script>
+{% endblock %}
